@@ -25,64 +25,65 @@ const CustomStar = ({ filled, onClick, index }) => (
   </motion.svg>
 );
 
-// Loader moderne avec gradient et animations fluides
-const ModernLoader = () => (
-  <div className="flex items-center space-x-1">
+// Composant de spinner circulaire moderne
+const CircularLoader = () => (
+  <div className="relative inline-flex items-center justify-center">
+    {/* Cercle extérieur avec gradient */}
     <motion.div
-      className="w-2 h-2 bg-white rounded-full"
-      animate={{
-        scale: [1, 1.5, 1],
-        opacity: [1, 0.5, 1],
-      }}
-      transition={{
-        duration: 1,
-        repeat: Infinity,
-        ease: "easeInOut",
-      }}
-    />
-    <motion.div
-      className="w-2 h-2 bg-white rounded-full"
-      animate={{
-        scale: [1, 1.5, 1],
-        opacity: [1, 0.5, 1],
-      }}
-      transition={{
-        duration: 1,
-        repeat: Infinity,
-        ease: "easeInOut",
-        delay: 0.2,
-      }}
-    />
-    <motion.div
-      className="w-2 h-2 bg-white rounded-full"
-      animate={{
-        scale: [1, 1.5, 1],
-        opacity: [1, 0.5, 1],
-      }}
-      transition={{
-        duration: 1,
-        repeat: Infinity,
-        ease: "easeInOut",
-        delay: 0.4,
-      }}
-    />
-  </div>
-);
-
-// Spinner circulaire avec gradient
-const GradientSpinner = () => (
-  <motion.div
-    className="relative w-6 h-6"
-    animate={{ rotate: 360 }}
-    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-  >
-    <div className="absolute inset-0 rounded-full border-3 border-transparent border-t-white border-r-white opacity-80" />
-    <motion.div
-      className="absolute inset-0 rounded-full border-3 border-transparent border-t-white/40 border-r-white/40"
-      animate={{ rotate: -360 }}
+      className="w-6 h-6 rounded-full bg-gradient-to-tr from-emerald-400 via-teal-300 to-cyan-400"
+      animate={{ rotate: 360 }}
       transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+      style={{
+        padding: '2px',
+        background: 'linear-gradient(135deg, #34D399, #2DD4BF, #22D3EE)',
+      }}
+    >
+      <div className="w-full h-full bg-green-600 rounded-full" />
+    </motion.div>
+    
+    {/* Cercle intérieur qui pulse */}
+    <motion.div
+      className="absolute w-3 h-3 bg-white rounded-full"
+      animate={{ 
+        scale: [1, 1.3, 1],
+        opacity: [1, 0.6, 1]
+      }}
+      transition={{ 
+        duration: 1.2, 
+        repeat: Infinity, 
+        ease: "easeInOut" 
+      }}
     />
-  </motion.div>
+    
+    {/* Particules orbitales */}
+    {[0, 120, 240].map((angle, i) => (
+      <motion.div
+        key={i}
+        className="absolute w-1.5 h-1.5 bg-white rounded-full"
+        style={{
+          left: '50%',
+          top: '50%',
+        }}
+        animate={{
+          x: [
+            Math.cos((angle * Math.PI) / 180) * 12,
+            Math.cos(((angle + 360) * Math.PI) / 180) * 12,
+          ],
+          y: [
+            Math.sin((angle * Math.PI) / 180) * 12,
+            Math.sin(((angle + 360) * Math.PI) / 180) * 12,
+          ],
+          opacity: [0.8, 0.3, 0.8],
+        }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          ease: "linear",
+          delay: i * 0.2,
+        }}
+      />
+    ))}
+  </div>
 );
 
 // Configuration de i18next
@@ -264,7 +265,7 @@ const FeedbackForm = () => {
       </div>
 
       {/* Logo centré en haut */}
-      <div className="w-full flex justify-center mb-6 pt-6">
+      <div className="w-full flex justify-center mb-6">
         <img src="/logo.png" alt="Logo de l'application" className="h-24" />
       </div>
 
@@ -437,59 +438,27 @@ const FeedbackForm = () => {
         </div>
 
         <motion.button
-          whileHover={!isSubmitDisabled ? { scale: 1.05 } : {}}
+          whileHover={!isSubmitDisabled ? { scale: 1.05, boxShadow: '0 0 15px rgba(16, 185, 129, 0.5)' } : {}}
           whileTap={!isSubmitDisabled ? { scale: 0.95 } : {}}
           onClick={handleSubmit}
           disabled={isSubmitDisabled}
-          className={`relative w-full p-4 rounded-lg flex items-center justify-center overflow-hidden ${
+          className={`w-full p-4 rounded-lg flex items-center justify-center ${
             isDarkMode ? 'bg-green-600' : 'bg-green-500'
           } text-white font-semibold transition ${
             isSubmitDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-600'
           }`}
           aria-label={i18n.t('submit')}
         >
-          {/* Effet de pulse animé en arrière-plan quand isSubmitting */}
-          <AnimatePresence>
-            {isSubmitting && (
-              <>
-                <motion.div
-                  className="absolute inset-0 bg-white/20 rounded-lg"
-                  initial={{ scale: 0, opacity: 0.8 }}
-                  animate={{ scale: 2, opacity: 0 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeOut" }}
-                />
-                <motion.div
-                  className="absolute inset-0 bg-white/10 rounded-lg"
-                  initial={{ scale: 0, opacity: 0.6 }}
-                  animate={{ scale: 2, opacity: 0 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeOut", delay: 0.5 }}
-                />
-              </>
-            )}
-          </AnimatePresence>
-          
           {isSubmitting ? (
-            <motion.div
-              className="flex items-center space-x-3"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <GradientSpinner />
-              <span>{i18n.t('submitting')}</span>
-            </motion.div>
+            <>
+              <CircularLoader />
+              <span className="ml-3">{i18n.t('submitting')}</span>
+            </>
           ) : (
-            <motion.div
-              className="flex items-center"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
+            <>
               <FaPaperPlane className="mr-2" />
               {i18n.t('submit')}
-            </motion.div>
+            </>
           )}
         </motion.button>
 
