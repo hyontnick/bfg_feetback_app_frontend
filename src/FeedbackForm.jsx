@@ -410,16 +410,31 @@ const FeedbackForm = () => {
           )}
         </motion.button>
 
-        <div className="mt-6 flex justify-end">
+        <div className="mt-6 flex justify-between items-center">
+          <motion.button
+            whileHover={{ scale: 1.1, x: -5 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => window.location.href = 'https://bloodflow-ghta.onrender.com'}
+            className={`p-3 rounded-full ${
+              isDarkMode
+                ? 'bg-blue-600 text-white hover:bg-blue-500'
+                : 'bg-blue-500 text-white hover:bg-blue-600'
+            } transition flex items-center justify-center shadow-lg`}
+            aria-label="Retourner à l'accueil"
+            disabled={isSubmitting}
+          >
+            <FaArrowLeft className="text-xl" />
+          </motion.button>
+
           <motion.button
             whileHover={{ scale: 1.1, rotate: 360 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => setIsDarkMode(!isDarkMode)}
-            className={`p-2 rounded-full ${
+            className={`p-3 rounded-full ${
               isDarkMode
                 ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-300'
                 : 'bg-gray-800 text-yellow-400 hover:bg-gray-700'
-            } transition`}
+            } transition shadow-lg`}
             aria-label={isDarkMode ? 'Activer mode clair' : 'Activer mode sombre'}
             disabled={isSubmitting}
           >
