@@ -312,7 +312,7 @@ const FeedbackForm = () => {
 
         <div className="mb-6 flex items-center justify-between">
           <div className="flex space-x-4">
-            {['😄', '😞', '😐', '❤️'].map((emoji) => (
+            {['😄', '😡', '😐', '❤️'].map((emoji) => (
               <motion.button
                 key={emoji}
                 whileHover={{ scale: 1.3, boxShadow: '0 0 10px rgba(251, 191, 36, 0.5)' }}
